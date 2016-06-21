@@ -1,0 +1,67 @@
+
+{
+	"sources" : 
+	[
+		
+		{
+			"file" : "/home/andreas/code/Slicer-Featurelets/Featurelets-Registration/qSlicerRegistrationModule.cxx"
+		},
+		
+		{
+			"file" : "/home/andreas/code/Slicer-Featurelets/Featurelets-Registration/qSlicerRegistrationModule.h"
+		},
+		
+		{
+			"file" : "/home/andreas/code/Slicer-Featurelets/Featurelets-Registration/qSlicerRegistrationModuleWidget.cxx"
+		},
+		
+		{
+			"file" : "/home/andreas/code/Slicer-Featurelets/Featurelets-Registration/qSlicerRegistrationModuleWidget.h"
+		},
+		
+		{
+			"file" : "/home/andreas/code/Slicer-Featurelets_4.5/Featurelets-Registration/moc_qSlicerRegistrationModule.cxx"
+		},
+		
+		{
+			"file" : "/home/andreas/code/Slicer-Featurelets_4.5/Featurelets-Registration/moc_qSlicerRegistrationModuleWidget.cxx"
+		},
+		
+		{
+			"file" : "/home/andreas/code/Slicer-Featurelets_4.5/Featurelets-Registration/ui_qSlicerRegistrationModuleWidget.h"
+		},
+		
+		{
+			"file" : "/home/andreas/code/Slicer-Featurelets_4.5/Featurelets-Registration/qrc_qSlicerRegistrationModule.cxx"
+		},
+		
+		{
+			"file" : "/home/andreas/code/Slicer-Featurelets_4.5/Featurelets-Registration/qrc_qSlicer.cxx"
+		},
+		
+		{
+			"file" : "/home/andreas/code/Slicer-Featurelets_4.5/Featurelets-Registration/moc_qSlicerRegistrationModule.cxx.rule"
+		},
+		
+		{
+			"file" : "/home/andreas/code/Slicer-Featurelets_4.5/Featurelets-Registration/moc_qSlicerRegistrationModuleWidget.cxx.rule"
+		},
+		
+		{
+			"file" : "/home/andreas/code/Slicer-Featurelets/Featurelets-Registration/Resources/UI/qSlicerRegistrationModuleWidget.ui"
+		},
+		
+		{
+			"file" : "/home/andreas/code/Slicer-Featurelets/Featurelets-Registration/Resources/qSlicerRegistrationModule.qrc"
+		},
+		
+		{
+			"file" : "/home/andreas/MyProjects/Slicer-r24735/Resources/qSlicer.qrc"
+		}
+	],
+	"target" : 
+	{
+		"labels" : [ "qSlicerRegistrationModule" ],
+		"name" : "qSlicerRegistrationModule"
+	}
+}

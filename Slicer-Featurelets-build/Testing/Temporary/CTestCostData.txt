@@ -1,0 +1,5 @@
+qSlicerRegistrationModuleGenericTest 0 0
+qSlicerRegistrationModuleWidgetGenericTest 0 0
+---
+qSlicerRegistrationModuleGenericTest
+qSlicerRegistrationModuleWidgetGenericTest

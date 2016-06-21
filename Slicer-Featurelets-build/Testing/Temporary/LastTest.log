@@ -1,0 +1,65 @@
+Start testing: May 25 11:42 CEST
+----------------------------------------------------------
+1/2 Testing: qSlicerRegistrationModuleGenericTest
+1/2 Test: qSlicerRegistrationModuleGenericTest
+Command: "/home/andreas/Slicer-SuperBuild-Release_4.5/Slicer-build/Slicer" "--launcher-no-splash" "--launcher-additional-settings" "/home/andreas/code/Slicer-Featurelets_4.5/Slicer-Featurelets-build/AdditionalLauncherSettings.ini" "--launch" "/home/andreas/code/Slicer-Featurelets_4.5/Slicer-Featurelets-build/bin/qSlicerRegistrationModuleGenericCxxTests" "qSlicerRegistrationModuleGenericTest"
+Directory: /home/andreas/code/Slicer-Featurelets_4.5/Slicer-Featurelets-build/Featurelets-Registration
+"qSlicerRegistrationModuleGenericTest" start time: May 25 11:42 CEST
+Output:
+----------------------------------------------------------
+Unable to load library icui18n "Cannot load library icui18n: (icui18n: cannot open shared object file: No such file or directory)" 
+Session start time .......: 2016-05-25 11:42:27
+Slicer version ...........: 4.5.0-1 (revision 24735) linux-amd64 - not installed
+Operating system .........: Linux / 3.13.0-86-generic / #131-Ubuntu SMP Thu May 12 23:33:13 UTC 2016 - 64-bit
+Memory ...................: 9998 MB physical, 10234 MB virtual 
+CPU ......................: GenuineIntel 2.328 MHz, 8 cores
+Developer mode enabled ...: no
+Prefer executable CLI ....: no
+Additional module paths ..: (none)
+Number of registered modules: 145 
+Number of instantiated modules: 145 
+error: [/home/andreas/code/Slicer-Featurelets_4.5/Slicer-Featurelets-build/bin/qSlicerRegistrationModuleGenericCxxTests] exit abnormally - Report the problem.
+<end of output>
+Test time =  41.14 sec
+----------------------------------------------------------
+Test Failed.
+"qSlicerRegistrationModuleGenericTest" end time: May 25 11:42 CEST
+"qSlicerRegistrationModuleGenericTest" time elapsed: 00:00:41
+----------------------------------------------------------
+
+2/2 Testing: qSlicerRegistrationModuleWidgetGenericTest
+2/2 Test: qSlicerRegistrationModuleWidgetGenericTest
+Command: "/home/andreas/Slicer-SuperBuild-Release_4.5/Slicer-build/Slicer" "--launcher-no-splash" "--launcher-additional-settings" "/home/andreas/code/Slicer-Featurelets_4.5/Slicer-Featurelets-build/AdditionalLauncherSettings.ini" "--launch" "/home/andreas/code/Slicer-Featurelets_4.5/Slicer-Featurelets-build/bin/qSlicerRegistrationModuleGenericCxxTests" "qSlicerRegistrationModuleWidgetGenericTest"
+Directory: /home/andreas/code/Slicer-Featurelets_4.5/Slicer-Featurelets-build/Featurelets-Registration
+"qSlicerRegistrationModuleWidgetGenericTest" start time: May 25 11:42 CEST
+Output:
+----------------------------------------------------------
+Unable to load library icui18n "Cannot load library icui18n: (icui18n: cannot open shared object file: No such file or directory)" 
+Session start time .......: 2016-05-25 11:42:27
+Slicer version ...........: 4.5.0-1 (revision 24735) linux-amd64 - not installed
+Operating system .........: Linux / 3.13.0-86-generic / #131-Ubuntu SMP Thu May 12 23:33:13 UTC 2016 - 64-bit
+Memory ...................: 9998 MB physical, 10234 MB virtual 
+CPU ......................: GenuineIntel 2.328 MHz, 8 cores
+Developer mode enabled ...: no
+Prefer executable CLI ....: no
+Additional module paths ..: (none)
+Number of registered modules: 145 
+Number of instantiated modules: 145 
+Line 179 qSlicerRegistrationModule widget has a minimum size hint width of 525px. It is wider than the max width of 500px.
+Failed to obtain reference to 'FileMenu'
+Failed to obtain reference to 'qSlicerAppMainWindow'
+No Data Probe frame - cannot create DataProbe
+Failed to obtain reference to 'qSlicerAppMainWindow'
+Failed to obtain reference to 'FileMenu'
+<end of output>
+Test time =  41.73 sec
+----------------------------------------------------------
+Test Failed.
+"qSlicerRegistrationModuleWidgetGenericTest" end time: May 25 11:42 CEST
+"qSlicerRegistrationModuleWidgetGenericTest" time elapsed: 00:00:41
+----------------------------------------------------------
+
+End testing: May 25 11:42 CEST
+
+qSlicerRegistrationModule =  82.87 sec
+
