@@ -21,11 +21,11 @@
 #include <qstring.h>
 
 // SlicerQt includes
-#include "qSlicerRegistrationModuleWidget.h"
-#include "ui_qSlicerRegistrationModuleWidget.h"
+#include "qSlicerFeatureletRegistrationModuleWidget.h"
+#include "ui_qSlicerFeatureletRegistrationModuleWidget.h"
 
-// Registration Logic includes
-#include <vtkSlicerRegistrationLogic.h>
+// FeatureletRegistration Logic includes
+#include <vtkSlicerFeatureletRegistrationLogic.h>
 
 // SlicerQt includes
 #include <qSlicerAbstractCoreModule.h>
@@ -33,24 +33,24 @@
 // MRML includes
 #include <vtkMRMLVolumeNode.h>
 #include <vtkMRMLApplicationLogic.h>
-#include <vtkMRMLRegistrationNode.h>
+#include <vtkMRMLFeatureletRegistrationNode.h>
 #include <vtkMRMLScene.h>
 #include <vtkMRMLDisplayNode.h>
 #include <vtkMRMLSelectionNode.h>
 
 //-----------------------------------------------------------------------------
 /// \ingroup Slicer_QtModules_ExtensionTemplate
-class qSlicerRegistrationModuleWidgetPrivate: public Ui_qSlicerRegistrationModuleWidget
+class qSlicerFeatureletRegistrationModuleWidgetPrivate: public Ui_qSlicerFeatureletRegistrationModuleWidget
 {
-    Q_DECLARE_PUBLIC(qSlicerRegistrationModuleWidget);
+    Q_DECLARE_PUBLIC(qSlicerFeatureletRegistrationModuleWidget);
   protected:
-    qSlicerRegistrationModuleWidget* const q_ptr;
+    qSlicerFeatureletRegistrationModuleWidget* const q_ptr;
 
   public:
-    qSlicerRegistrationModuleWidgetPrivate(qSlicerRegistrationModuleWidget& object);
-    ~qSlicerRegistrationModuleWidgetPrivate();
+    qSlicerFeatureletRegistrationModuleWidgetPrivate(qSlicerFeatureletRegistrationModuleWidget& object);
+    ~qSlicerFeatureletRegistrationModuleWidgetPrivate();
 
-    vtkSlicerRegistrationLogic* logic() const;
+    vtkSlicerFeatureletRegistrationLogic* logic() const;
 
     /// Using this flag prevents overriding the parameter set node contents when the
     /// QMRMLCombobox selects the first instance of the specified node type when initializing
@@ -59,42 +59,42 @@ class qSlicerRegistrationModuleWidgetPrivate: public Ui_qSlicerRegistrationModul
 
 
 //-----------------------------------------------------------------------------
-// qSlicerRegistrationModuleWidgetPrivate methods
+// qSlicerFeatureletRegistrationModuleWidgetPrivate methods
 
 //-----------------------------------------------------------------------------
-qSlicerRegistrationModuleWidgetPrivate::qSlicerRegistrationModuleWidgetPrivate(qSlicerRegistrationModuleWidget& object)
+qSlicerFeatureletRegistrationModuleWidgetPrivate::qSlicerFeatureletRegistrationModuleWidgetPrivate(qSlicerFeatureletRegistrationModuleWidget& object)
                                       : q_ptr(&object)
                                       , ModuleWindowInitialized(false) {
 }
 
 //-----------------------------------------------------------------------------
-qSlicerRegistrationModuleWidgetPrivate::~qSlicerRegistrationModuleWidgetPrivate() {
+qSlicerFeatureletRegistrationModuleWidgetPrivate::~qSlicerFeatureletRegistrationModuleWidgetPrivate() {
 }
 
 //-----------------------------------------------------------------------------
-vtkSlicerRegistrationLogic* qSlicerRegistrationModuleWidgetPrivate::logic() const {
-  Q_Q(const qSlicerRegistrationModuleWidget);
-  return vtkSlicerRegistrationLogic::SafeDownCast(q->logic());
+vtkSlicerFeatureletRegistrationLogic* qSlicerFeatureletRegistrationModuleWidgetPrivate::logic() const {
+  Q_Q(const qSlicerFeatureletRegistrationModuleWidget);
+  return vtkSlicerFeatureletRegistrationLogic::SafeDownCast(q->logic());
 }
 
 
 //-----------------------------------------------------------------------------
-// qSlicerRegistrationModuleWidget methods
+// qSlicerFeatureletRegistrationModuleWidget methods
 
 //-----------------------------------------------------------------------------
-qSlicerRegistrationModuleWidget::qSlicerRegistrationModuleWidget(QWidget* _parent)
+qSlicerFeatureletRegistrationModuleWidget::qSlicerFeatureletRegistrationModuleWidget(QWidget* _parent)
                                : Superclass( _parent )
-                               , d_ptr( new qSlicerRegistrationModuleWidgetPrivate(*this) ) {
-  this->registrationNode = NULL;
+                               , d_ptr( new qSlicerFeatureletRegistrationModuleWidgetPrivate(*this) ) {
+  this->FeatureletRegistrationNode = NULL;
 }
 
 //-----------------------------------------------------------------------------
-qSlicerRegistrationModuleWidget::~qSlicerRegistrationModuleWidget() {
+qSlicerFeatureletRegistrationModuleWidget::~qSlicerFeatureletRegistrationModuleWidget() {
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerRegistrationModuleWidget::setMRMLScene(vtkMRMLScene* scene) {
-  Q_D(qSlicerRegistrationModuleWidget);
+void qSlicerFeatureletRegistrationModuleWidget::setMRMLScene(vtkMRMLScene* scene) {
+  Q_D(qSlicerFeatureletRegistrationModuleWidget);
 
   this->Superclass::setMRMLScene(scene);
 
@@ -102,72 +102,72 @@ void qSlicerRegistrationModuleWidget::setMRMLScene(vtkMRMLScene* scene) {
                  this, SLOT(onSceneImportedEvent()) );
 
   // Find parameters node or create it if there is none in the scene
-  if (scene &&  d->logic()->GetRegistrationNode() == 0) {
-    vtkMRMLNode* node = scene->GetNthNodeByClass(0, "vtkMRMLRegistrationNode");
+  if (scene &&  d->logic()->GetFeatureletRegistrationNode() == 0) {
+    vtkMRMLNode* node = scene->GetNthNodeByClass(0, "vtkMRMLFeatureletRegistrationNode");
     if (node) {
-      this->setRegistrationNode( vtkMRMLRegistrationNode::SafeDownCast(node) );
+      this->setFeatureletRegistrationNode( vtkMRMLFeatureletRegistrationNode::SafeDownCast(node) );
     }
   }
-  this->initializeRegistrationNode(scene);
+  this->initializeFeatureletRegistrationNode(scene);
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerRegistrationModuleWidget::initializeRegistrationNode(vtkMRMLScene* scene) {
-  vtkCollection* registrationNodes = scene->GetNodesByClass("vtkMRMLRegistrationNode");
+void qSlicerFeatureletRegistrationModuleWidget::initializeFeatureletRegistrationNode(vtkMRMLScene* scene) {
+  vtkCollection* FeatureletRegistrationNodes = scene->GetNodesByClass("vtkMRMLFeatureletRegistrationNode");
 
-  if(registrationNodes->GetNumberOfItems() > 0) {
-    this->registrationNode = vtkMRMLRegistrationNode::SafeDownCast(registrationNodes->GetItemAsObject(0));
-    if(!this->registrationNode) {
-      qCritical() << "FATAL ERROR: Cannot instantiate RegistrationNode";
-      Q_ASSERT(this->registrationNode);
+  if(FeatureletRegistrationNodes->GetNumberOfItems() > 0) {
+    this->FeatureletRegistrationNode = vtkMRMLFeatureletRegistrationNode::SafeDownCast(FeatureletRegistrationNodes->GetItemAsObject(0));
+    if(!this->FeatureletRegistrationNode) {
+      qCritical() << "FATAL ERROR: Cannot instantiate FeatureletRegistrationNode";
+      Q_ASSERT(this->FeatureletRegistrationNode);
     }
   }
   else {
-    this->registrationNode = vtkMRMLRegistrationNode::New();
-    scene->AddNode(this->registrationNode);
-    this->registrationNode->Delete();
+    this->FeatureletRegistrationNode = vtkMRMLFeatureletRegistrationNode::New();
+    scene->AddNode(this->FeatureletRegistrationNode);
+    this->FeatureletRegistrationNode->Delete();
   }
-  registrationNodes->Delete();
+  FeatureletRegistrationNodes->Delete();
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerRegistrationModuleWidget::onSceneImportedEvent() {
+void qSlicerFeatureletRegistrationModuleWidget::onSceneImportedEvent() {
   this->onEnter();
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerRegistrationModuleWidget::enter() {
+void qSlicerFeatureletRegistrationModuleWidget::enter() {
   this->onEnter();
   this->Superclass::enter();
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerRegistrationModuleWidget::onEnter() {
+void qSlicerFeatureletRegistrationModuleWidget::onEnter() {
   if (this->mrmlScene() == 0) {
     std::cerr << "onEnter failed - ModuleWindow is not initialized - mrmlScene is null" << std::endl;
     return;
   }
-  Q_D(qSlicerRegistrationModuleWidget);
+  Q_D(qSlicerFeatureletRegistrationModuleWidget);
 
   // First check the logic if it has a parameter node
   if (d->logic() == NULL) {
       std::cerr << "onEnter failed - ModuleWindow is not initialized - logic is null" << std::endl;
     return;
   }
-  vtkMRMLRegistrationNode* paramNode = d->logic()->GetRegistrationNode();
+  vtkMRMLFeatureletRegistrationNode* paramNode = d->logic()->GetFeatureletRegistrationNode();
 
   // If we have a parameter node select it
   if (paramNode == NULL) {
-    vtkMRMLNode* node = this->mrmlScene()->GetNthNodeByClass(0, "vtkMRMLRegistrationNode");
+    vtkMRMLNode* node = this->mrmlScene()->GetNthNodeByClass(0, "vtkMRMLFeatureletRegistrationNode");
     if (node) {
-      paramNode = vtkMRMLRegistrationNode::SafeDownCast(node);
-      d->logic()->SetAndObserveRegistrationNode(paramNode);
+      paramNode = vtkMRMLFeatureletRegistrationNode::SafeDownCast(node);
+      d->logic()->SetAndObserveFeatureletRegistrationNode(paramNode);
       return;
     }
     else {
-      vtkSmartPointer<vtkMRMLRegistrationNode> newNode = vtkSmartPointer<vtkMRMLRegistrationNode>::New();
+      vtkSmartPointer<vtkMRMLFeatureletRegistrationNode> newNode = vtkSmartPointer<vtkMRMLFeatureletRegistrationNode>::New();
       this->mrmlScene()->AddNode(newNode);
-      d->logic()->SetAndObserveRegistrationNode(newNode);
+      d->logic()->SetAndObserveFeatureletRegistrationNode(newNode);
     }
   }
   d->ModuleWindowInitialized = true;
@@ -175,37 +175,37 @@ void qSlicerRegistrationModuleWidget::onEnter() {
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerRegistrationModuleWidget::setRegistrationNode(vtkMRMLNode *node) {
-  Q_D(qSlicerRegistrationModuleWidget);
+void qSlicerFeatureletRegistrationModuleWidget::setFeatureletRegistrationNode(vtkMRMLNode *node) {
+  Q_D(qSlicerFeatureletRegistrationModuleWidget);
 
-  vtkMRMLRegistrationNode* paramNode = vtkMRMLRegistrationNode::SafeDownCast(node);
+  vtkMRMLFeatureletRegistrationNode* paramNode = vtkMRMLFeatureletRegistrationNode::SafeDownCast(node);
 
   // Each time the node is modified, the qt widgets are updated
-  qvtkReconnect( d->logic()->GetRegistrationNode(), paramNode, vtkCommand::ModifiedEvent,
+  qvtkReconnect( d->logic()->GetFeatureletRegistrationNode(), paramNode, vtkCommand::ModifiedEvent,
                  this, SLOT(updateWidgetFromMRML()) );
 
-  d->logic()->SetAndObserveRegistrationNode(paramNode);
+  d->logic()->SetAndObserveFeatureletRegistrationNode(paramNode);
 
   // Set selected MRML nodes in comboboxes in the parameter set if it was NULL there (then in the
   // meantime  the comboboxes selected the first one from the scene and we have to set that)
   if (paramNode) {
-    if ( (qSlicerRegistrationModuleWidget::IsStringNullOrEmpty(paramNode->GetFixedImageNodeID()))
+    if ( (qSlicerFeatureletRegistrationModuleWidget::IsStringNullOrEmpty(paramNode->GetFixedImageNodeID()))
       && d->FixedImageComboBox->currentNode() ) {
       paramNode->SetAndObserveFixedImageNodeID(d->FixedImageComboBox->currentNodeID().toLatin1());
     }
-    if ( (qSlicerRegistrationModuleWidget::IsStringNullOrEmpty(paramNode->GetMovingImageNodeID()))
+    if ( (qSlicerFeatureletRegistrationModuleWidget::IsStringNullOrEmpty(paramNode->GetMovingImageNodeID()))
       && d->MovingImageComboBox->currentNode() ) {
       paramNode->SetAndObserveMovingImageNodeID(d->MovingImageComboBox->currentNodeID().toLatin1());
     }
-    if ( (qSlicerRegistrationModuleWidget::IsStringNullOrEmpty(paramNode->GetDeformedImageNodeID()))
+    if ( (qSlicerFeatureletRegistrationModuleWidget::IsStringNullOrEmpty(paramNode->GetDeformedImageNodeID()))
       && d->DeformedImageComboBox->currentNode() ) {
       paramNode->SetAndObserveDeformedImageNodeID(d->DeformedImageComboBox->currentNodeID().toLatin1());
     }
-    if ( (qSlicerRegistrationModuleWidget::IsStringNullOrEmpty(paramNode->GetDeformationFieldID()))
+    if ( (qSlicerFeatureletRegistrationModuleWidget::IsStringNullOrEmpty(paramNode->GetDeformationFieldID()))
       && d->DeformationFieldComboBox->currentNode() ) {
       paramNode->SetAndObserveDeformationFieldID(d->DeformationFieldComboBox->currentNodeID().toLatin1());
     }
-    if ( (qSlicerRegistrationModuleWidget::IsStringNullOrEmpty(paramNode->GetFiducialPointsID()))
+    if ( (qSlicerFeatureletRegistrationModuleWidget::IsStringNullOrEmpty(paramNode->GetFiducialPointsID()))
       && d->FiducialPointsComboBox->currentNode() ) {
       paramNode->SetAndObserveFiducialPointsID(d->FiducialPointsComboBox->currentNodeID().toLatin1());
     }
@@ -214,24 +214,24 @@ void qSlicerRegistrationModuleWidget::setRegistrationNode(vtkMRMLNode *node) {
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerRegistrationModuleWidget::updateWidgetFromMRML() {
-  Q_D(qSlicerRegistrationModuleWidget);
+void qSlicerFeatureletRegistrationModuleWidget::updateWidgetFromMRML() {
+  Q_D(qSlicerFeatureletRegistrationModuleWidget);
 
-  vtkMRMLRegistrationNode* paramNode = d->logic()->GetRegistrationNode();
+  vtkMRMLFeatureletRegistrationNode* paramNode = d->logic()->GetFeatureletRegistrationNode();
   if (paramNode && this->mrmlScene()) {
-    if (!qSlicerRegistrationModuleWidget::IsStringNullOrEmpty(paramNode->GetFixedImageNodeID())) {
+    if (!qSlicerFeatureletRegistrationModuleWidget::IsStringNullOrEmpty(paramNode->GetFixedImageNodeID())) {
       d->FixedImageComboBox->setCurrentNodeID(paramNode->GetFixedImageNodeID());
     }
-    if (!qSlicerRegistrationModuleWidget::IsStringNullOrEmpty(paramNode->GetMovingImageNodeID())) {
+    if (!qSlicerFeatureletRegistrationModuleWidget::IsStringNullOrEmpty(paramNode->GetMovingImageNodeID())) {
       d->MovingImageComboBox->setCurrentNodeID(paramNode->GetMovingImageNodeID());
     }
-    if (!qSlicerRegistrationModuleWidget::IsStringNullOrEmpty(paramNode->GetDeformedImageNodeID())) {
+    if (!qSlicerFeatureletRegistrationModuleWidget::IsStringNullOrEmpty(paramNode->GetDeformedImageNodeID())) {
       d->DeformedImageComboBox->setCurrentNodeID(paramNode->GetDeformedImageNodeID());
     }
-    if (!qSlicerRegistrationModuleWidget::IsStringNullOrEmpty(paramNode->GetDeformationFieldID())) {
+    if (!qSlicerFeatureletRegistrationModuleWidget::IsStringNullOrEmpty(paramNode->GetDeformationFieldID())) {
       d->DeformationFieldComboBox->setCurrentNodeID(paramNode->GetDeformationFieldID());
     }
-    if (!qSlicerRegistrationModuleWidget::IsStringNullOrEmpty(paramNode->GetFiducialPointsID())) {
+    if (!qSlicerFeatureletRegistrationModuleWidget::IsStringNullOrEmpty(paramNode->GetFiducialPointsID())) {
       d->FiducialPointsComboBox->setCurrentNodeID(paramNode->GetFiducialPointsID());
     }
     d->horizontalSlider->setValue(paramNode->GetFeatureletsSize());
@@ -263,8 +263,8 @@ void qSlicerRegistrationModuleWidget::updateWidgetFromMRML() {
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerRegistrationModuleWidget::setup() {
-  Q_D(qSlicerRegistrationModuleWidget);
+void qSlicerFeatureletRegistrationModuleWidget::setup() {
+  Q_D(qSlicerFeatureletRegistrationModuleWidget);
   d->setupUi(this);
   this->Superclass::setup();
 
@@ -325,16 +325,16 @@ void qSlicerRegistrationModuleWidget::setup() {
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerRegistrationModuleWidget::onLogicModified() {
+void qSlicerFeatureletRegistrationModuleWidget::onLogicModified() {
   this->updateWidgetFromMRML();
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerRegistrationModuleWidget::onRunClicked() {
-  Q_D(const qSlicerRegistrationModuleWidget);
-  vtkSlicerRegistrationLogic *logic = d->logic();
+void qSlicerFeatureletRegistrationModuleWidget::onRunClicked() {
+  Q_D(const qSlicerFeatureletRegistrationModuleWidget);
+  vtkSlicerFeatureletRegistrationLogic *logic = d->logic();
 
-  if( !this->registrationNode || !d->FixedImageComboBox->currentNode() || !d->MovingImageComboBox->currentNode() ) {
+  if( !this->FeatureletRegistrationNode || !d->FixedImageComboBox->currentNode() || !d->MovingImageComboBox->currentNode() ) {
     std::cerr << "A fixed / moving image has to be selected!" << std::endl;
     return;
   }
@@ -346,83 +346,83 @@ void qSlicerRegistrationModuleWidget::onRunClicked() {
     std::cerr << "A deformation field for output has to be selected!" << std::endl;
     return;
   }
-  this->registrationNode->SetFixedImageNodeID(d->FixedImageComboBox->currentNode()->GetID());
-  this->registrationNode->SetMovingImageNodeID(d->MovingImageComboBox->currentNode()->GetID());
-  this->registrationNode->SetDeformedImageNodeID(d->DeformedImageComboBox->currentNode()->GetID());
-  this->registrationNode->SetDeformationFieldID(d->DeformationFieldComboBox->currentNode()->GetID());
+  this->FeatureletRegistrationNode->SetFixedImageNodeID(d->FixedImageComboBox->currentNode()->GetID());
+  this->FeatureletRegistrationNode->SetMovingImageNodeID(d->MovingImageComboBox->currentNode()->GetID());
+  this->FeatureletRegistrationNode->SetDeformedImageNodeID(d->DeformedImageComboBox->currentNode()->GetID());
+  this->FeatureletRegistrationNode->SetDeformationFieldID(d->DeformationFieldComboBox->currentNode()->GetID());
 
-  if(this->registrationNode->GetcheckBoxFiducial()){
+  if(this->FeatureletRegistrationNode->GetcheckBoxFiducial()){
     if(!d->FiducialPointsComboBox->currentNode()) {
       std::cerr << "Fiducial points have to be selected!" << std::endl;
       return;
     }
-    this->registrationNode->SetFiducialPointsID(d->FiducialPointsComboBox->currentNode()->GetID());
+    this->FeatureletRegistrationNode->SetFiducialPointsID(d->FiducialPointsComboBox->currentNode()->GetID());
   }
 
-  if(!logic->RunClicked(this->registrationNode)) {
+  if(!logic->RunClicked(this->FeatureletRegistrationNode)) {
     std::cerr << "Registration is done!" << std::endl;
     vtkSlicerApplicationLogic *appLogic = this->module()->appLogic();
     vtkMRMLSelectionNode *selectionNode = appLogic->GetSelectionNode();
-    selectionNode->SetReferenceActiveVolumeID(this->registrationNode->GetDeformedImageNodeID());
+    selectionNode->SetReferenceActiveVolumeID(this->FeatureletRegistrationNode->GetDeformedImageNodeID());
     appLogic->PropagateVolumeSelection();
   }
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerRegistrationModuleWidget::onShowVolume() {
-    Q_D(const qSlicerRegistrationModuleWidget);
-    vtkSlicerRegistrationLogic *logic = d->logic();
+void qSlicerFeatureletRegistrationModuleWidget::onShowVolume() {
+    Q_D(const qSlicerFeatureletRegistrationModuleWidget);
+    vtkSlicerFeatureletRegistrationLogic *logic = d->logic();
 
-    if( !this->registrationNode || !d->FixedImageComboBox->currentNode() ) {
+    if( !this->FeatureletRegistrationNode || !d->FixedImageComboBox->currentNode() ) {
         std::cerr << "Memberfunction onShowVolume is not executed - termination condiation fulfilled" << std::endl;
         return;
     }
-    this->registrationNode->SetFixedImageNodeID(d->FixedImageComboBox->currentNode()->GetID());
+    this->FeatureletRegistrationNode->SetFixedImageNodeID(d->FixedImageComboBox->currentNode()->GetID());
     bool fixedImage = true;
 
-    if(!logic->ShowVolume(this->registrationNode, fixedImage)) {
+    if(!logic->ShowVolume(this->FeatureletRegistrationNode, fixedImage)) {
       //std::cerr << "Propagating to the selection node" << std::endl;
       vtkSlicerApplicationLogic *appLogic = this->module()->appLogic();
       vtkMRMLSelectionNode *selectionNode = appLogic->GetSelectionNode();
 
       //char* activeNodeID = selectionNode->GetActiveVolumeID();
       //std::cerr << "Selection Node (before): " << activeNodeID << std::endl;
-      selectionNode->SetReferenceActiveVolumeID(this->registrationNode->GetFixedImageNodeID());
+      selectionNode->SetReferenceActiveVolumeID(this->FeatureletRegistrationNode->GetFixedImageNodeID());
       appLogic->PropagateVolumeSelection();
       //std::cerr << "Selection Node (after): " << activeNodeID << std::endl << std::endl;
     }
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerRegistrationModuleWidget::onShowVolume2() {
-    Q_D(const qSlicerRegistrationModuleWidget);
-    vtkSlicerRegistrationLogic *logic = d->logic();
+void qSlicerFeatureletRegistrationModuleWidget::onShowVolume2() {
+    Q_D(const qSlicerFeatureletRegistrationModuleWidget);
+    vtkSlicerFeatureletRegistrationLogic *logic = d->logic();
 
-    if(!this->registrationNode || !d->MovingImageComboBox->currentNode()) {
+    if(!this->FeatureletRegistrationNode || !d->MovingImageComboBox->currentNode()) {
       std::cerr << "Memberfunction onShowVolume is not executed - termination condiation fulfilled" << std::endl;
       return;
     }
-    this->registrationNode->SetMovingImageNodeID(d->MovingImageComboBox->currentNode()->GetID());
+    this->FeatureletRegistrationNode->SetMovingImageNodeID(d->MovingImageComboBox->currentNode()->GetID());
     bool fixedImage = false;
 
-    if(!logic->ShowVolume(this->registrationNode, fixedImage)) {
+    if(!logic->ShowVolume(this->FeatureletRegistrationNode, fixedImage)) {
       //std::cerr << "Propagating to the selection node" << std::endl;
       vtkSlicerApplicationLogic *appLogic = this->module()->appLogic();
       vtkMRMLSelectionNode *selectionNode = appLogic->GetSelectionNode();
 
       //char* activeNodeID = selectionNode->GetActiveVolumeID();
       //std::cerr << "Selection Node (before): " << activeNodeID << std::endl;
-      selectionNode->SetReferenceActiveVolumeID(this->registrationNode->GetMovingImageNodeID());
+      selectionNode->SetReferenceActiveVolumeID(this->FeatureletRegistrationNode->GetMovingImageNodeID());
       appLogic->PropagateVolumeSelection();
       //std::cerr << "Selection Node (after): " << activeNodeID << std::endl << std::endl;
     }
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerRegistrationModuleWidget::onFixedImageNodeChanged(vtkMRMLNode* node) {
-  Q_D(qSlicerRegistrationModuleWidget);
+void qSlicerFeatureletRegistrationModuleWidget::onFixedImageNodeChanged(vtkMRMLNode* node) {
+  Q_D(qSlicerFeatureletRegistrationModuleWidget);
 
-  vtkMRMLRegistrationNode* paramNode = d->logic()->GetRegistrationNode();
+  vtkMRMLFeatureletRegistrationNode* paramNode = d->logic()->GetFeatureletRegistrationNode();
   bool debugMode = false;
   if(paramNode)
     debugMode = paramNode->GetcheckBoxDebug();
@@ -438,7 +438,7 @@ void qSlicerRegistrationModuleWidget::onFixedImageNodeChanged(vtkMRMLNode* node)
   if(!paramNode || !this->mrmlScene() || !node || !d->ModuleWindowInitialized) {
     if(debugMode) {
       std::cerr << "Moving Image Node: termination condiation fulfilled" << std::endl;
-      std::cerr << "RegistrationNode: " << paramNode << std::endl;
+      std::cerr << "FeatureletRegistrationNode: " << paramNode << std::endl;
       std::cerr << "This->mrmlScene: " << this->mrmlScene() << std::endl;
       std::cerr << "vtkMRMLNode: " << node << std::endl << std::endl;
     }
@@ -450,10 +450,10 @@ void qSlicerRegistrationModuleWidget::onFixedImageNodeChanged(vtkMRMLNode* node)
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerRegistrationModuleWidget::onMovingImageNodeChanged(vtkMRMLNode* node) {
-  Q_D(qSlicerRegistrationModuleWidget);
+void qSlicerFeatureletRegistrationModuleWidget::onMovingImageNodeChanged(vtkMRMLNode* node) {
+  Q_D(qSlicerFeatureletRegistrationModuleWidget);
 
-  vtkMRMLRegistrationNode* paramNode = d->logic()->GetRegistrationNode();
+  vtkMRMLFeatureletRegistrationNode* paramNode = d->logic()->GetFeatureletRegistrationNode();
   bool debugMode = false;
   if(paramNode)
     debugMode = paramNode->GetcheckBoxDebug();
@@ -469,7 +469,7 @@ void qSlicerRegistrationModuleWidget::onMovingImageNodeChanged(vtkMRMLNode* node
   if(!paramNode || !this->mrmlScene() || !node || !d->ModuleWindowInitialized) {
     if(debugMode) {
       std::cerr << "Moving Image Node: termination condiation fulfilled" << std::endl;
-      std::cerr << "RegistrationNode: " << paramNode << std::endl;
+      std::cerr << "FeatureletRegistrationNode: " << paramNode << std::endl;
       std::cerr << "This->mrmlScene: " << this->mrmlScene() << std::endl;
       std::cerr << "vtkMRMLNode: " << node << std::endl << std::endl;
     }
@@ -481,10 +481,10 @@ void qSlicerRegistrationModuleWidget::onMovingImageNodeChanged(vtkMRMLNode* node
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerRegistrationModuleWidget::onDeformedImageNodeChanged(vtkMRMLNode* node) {
-  Q_D(qSlicerRegistrationModuleWidget);
+void qSlicerFeatureletRegistrationModuleWidget::onDeformedImageNodeChanged(vtkMRMLNode* node) {
+  Q_D(qSlicerFeatureletRegistrationModuleWidget);
 
-  vtkMRMLRegistrationNode* paramNode = d->logic()->GetRegistrationNode();
+  vtkMRMLFeatureletRegistrationNode* paramNode = d->logic()->GetFeatureletRegistrationNode();
   bool debugMode = false;
   if(paramNode)
     debugMode = paramNode->GetcheckBoxDebug();
@@ -505,21 +505,21 @@ void qSlicerRegistrationModuleWidget::onDeformedImageNodeChanged(vtkMRMLNode* no
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerRegistrationModuleWidget::onDeformedImageNodeAddedByUser(vtkMRMLNode* node) {
-  Q_D(qSlicerRegistrationModuleWidget);
+void qSlicerFeatureletRegistrationModuleWidget::onDeformedImageNodeAddedByUser(vtkMRMLNode* node) {
+  Q_D(qSlicerFeatureletRegistrationModuleWidget);
   if(!node) {
     return;
   }
   std::cerr << "Output Node is added by the User" << std::endl;
-  vtkMRMLRegistrationNode* paramNode = d->logic()->GetRegistrationNode();
+  vtkMRMLFeatureletRegistrationNode* paramNode = d->logic()->GetFeatureletRegistrationNode();
   paramNode->SetAndObserveDeformedImageNodeID(node->GetID());
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerRegistrationModuleWidget::onDeformationFieldChanged(vtkMRMLNode* node) {
-  Q_D(qSlicerRegistrationModuleWidget);
+void qSlicerFeatureletRegistrationModuleWidget::onDeformationFieldChanged(vtkMRMLNode* node) {
+  Q_D(qSlicerFeatureletRegistrationModuleWidget);
 
-  vtkMRMLRegistrationNode* paramNode = d->logic()->GetRegistrationNode();
+  vtkMRMLFeatureletRegistrationNode* paramNode = d->logic()->GetFeatureletRegistrationNode();
   bool debugMode = false;
   if(paramNode)
     debugMode = paramNode->GetcheckBoxDebug();
@@ -540,21 +540,21 @@ void qSlicerRegistrationModuleWidget::onDeformationFieldChanged(vtkMRMLNode* nod
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerRegistrationModuleWidget::onDeformationFieldAddedByUser(vtkMRMLNode* node) {
-  Q_D(qSlicerRegistrationModuleWidget);
+void qSlicerFeatureletRegistrationModuleWidget::onDeformationFieldAddedByUser(vtkMRMLNode* node) {
+  Q_D(qSlicerFeatureletRegistrationModuleWidget);
   if(!node)
     return;
 
   std::cerr << "Deformation field is added by the User" << std::endl;
-  vtkMRMLRegistrationNode* paramNode = d->logic()->GetRegistrationNode();
+  vtkMRMLFeatureletRegistrationNode* paramNode = d->logic()->GetFeatureletRegistrationNode();
   paramNode->SetAndObserveDeformationFieldID(node->GetID());
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerRegistrationModuleWidget::onFiducialPointsNodeChanged(vtkMRMLNode* node) {
-  Q_D(qSlicerRegistrationModuleWidget);
+void qSlicerFeatureletRegistrationModuleWidget::onFiducialPointsNodeChanged(vtkMRMLNode* node) {
+  Q_D(qSlicerFeatureletRegistrationModuleWidget);
 
-  vtkMRMLRegistrationNode* paramNode = d->logic()->GetRegistrationNode();  
+  vtkMRMLFeatureletRegistrationNode* paramNode = d->logic()->GetFeatureletRegistrationNode();  
   bool debugMode = false;
   if(paramNode)
     debugMode = paramNode->GetcheckBoxDebug();
@@ -575,21 +575,21 @@ void qSlicerRegistrationModuleWidget::onFiducialPointsNodeChanged(vtkMRMLNode* n
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerRegistrationModuleWidget::onFiducialPointsNodeAddedByUser(vtkMRMLNode* node) {
-  Q_D(qSlicerRegistrationModuleWidget);
+void qSlicerFeatureletRegistrationModuleWidget::onFiducialPointsNodeAddedByUser(vtkMRMLNode* node) {
+  Q_D(qSlicerFeatureletRegistrationModuleWidget);
   if(!node)
     return;
 
   std::cerr << "Fiducial Point Node is added by the User" << std::endl;
-  vtkMRMLRegistrationNode* paramNode = d->logic()->GetRegistrationNode();
+  vtkMRMLFeatureletRegistrationNode* paramNode = d->logic()->GetFeatureletRegistrationNode();
   paramNode->SetAndObserveFiducialPointsID(node->GetID());
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerRegistrationModuleWidget::onFeatureletsSizeChanged(int value) {
-  Q_D(qSlicerRegistrationModuleWidget);
+void qSlicerFeatureletRegistrationModuleWidget::onFeatureletsSizeChanged(int value) {
+  Q_D(qSlicerFeatureletRegistrationModuleWidget);
 
-  vtkMRMLRegistrationNode* paramNode = d->logic()->GetRegistrationNode();
+  vtkMRMLFeatureletRegistrationNode* paramNode = d->logic()->GetFeatureletRegistrationNode();
   if ( !paramNode || !this->mrmlScene())
       return;
 
@@ -603,10 +603,10 @@ void qSlicerRegistrationModuleWidget::onFeatureletsSizeChanged(int value) {
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerRegistrationModuleWidget::onSearchRegionSizeChanged(int value) {
-  Q_D(qSlicerRegistrationModuleWidget);
+void qSlicerFeatureletRegistrationModuleWidget::onSearchRegionSizeChanged(int value) {
+  Q_D(qSlicerFeatureletRegistrationModuleWidget);
 
-  vtkMRMLRegistrationNode* paramNode = d->logic()->GetRegistrationNode();
+  vtkMRMLFeatureletRegistrationNode* paramNode = d->logic()->GetFeatureletRegistrationNode();
   if ( !paramNode || !this->mrmlScene())
     return;
 
@@ -620,10 +620,10 @@ void qSlicerRegistrationModuleWidget::onSearchRegionSizeChanged(int value) {
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerRegistrationModuleWidget::onFeatureletsSizeZChanged(int value) {
-  Q_D(qSlicerRegistrationModuleWidget);
+void qSlicerFeatureletRegistrationModuleWidget::onFeatureletsSizeZChanged(int value) {
+  Q_D(qSlicerFeatureletRegistrationModuleWidget);
 
-  vtkMRMLRegistrationNode* paramNode = d->logic()->GetRegistrationNode();
+  vtkMRMLFeatureletRegistrationNode* paramNode = d->logic()->GetFeatureletRegistrationNode();
   if ( !paramNode || !this->mrmlScene())
       return;
 
@@ -637,10 +637,10 @@ void qSlicerRegistrationModuleWidget::onFeatureletsSizeZChanged(int value) {
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerRegistrationModuleWidget::onSearchRegionSizeZChanged(int value) {
-  Q_D(qSlicerRegistrationModuleWidget);
+void qSlicerFeatureletRegistrationModuleWidget::onSearchRegionSizeZChanged(int value) {
+  Q_D(qSlicerFeatureletRegistrationModuleWidget);
 
-  vtkMRMLRegistrationNode* paramNode = d->logic()->GetRegistrationNode();
+  vtkMRMLFeatureletRegistrationNode* paramNode = d->logic()->GetFeatureletRegistrationNode();
   if ( !paramNode || !this->mrmlScene())
     return;
 
@@ -654,10 +654,10 @@ void qSlicerRegistrationModuleWidget::onSearchRegionSizeZChanged(int value) {
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerRegistrationModuleWidget::onMaxStepLengthChanged(double value) {
-  Q_D(qSlicerRegistrationModuleWidget);
+void qSlicerFeatureletRegistrationModuleWidget::onMaxStepLengthChanged(double value) {
+  Q_D(qSlicerFeatureletRegistrationModuleWidget);
 
-  vtkMRMLRegistrationNode* paramNode = d->logic()->GetRegistrationNode();
+  vtkMRMLFeatureletRegistrationNode* paramNode = d->logic()->GetFeatureletRegistrationNode();
   if ( !paramNode || !this->mrmlScene())
     return;
 
@@ -671,10 +671,10 @@ void qSlicerRegistrationModuleWidget::onMaxStepLengthChanged(double value) {
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerRegistrationModuleWidget::onMinStepLengthChanged(double value) {
-  Q_D(qSlicerRegistrationModuleWidget);
+void qSlicerFeatureletRegistrationModuleWidget::onMinStepLengthChanged(double value) {
+  Q_D(qSlicerFeatureletRegistrationModuleWidget);
 
-  vtkMRMLRegistrationNode* paramNode = d->logic()->GetRegistrationNode();
+  vtkMRMLFeatureletRegistrationNode* paramNode = d->logic()->GetFeatureletRegistrationNode();
   if ( !paramNode || !this->mrmlScene())
     return;
 
@@ -688,10 +688,10 @@ void qSlicerRegistrationModuleWidget::onMinStepLengthChanged(double value) {
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerRegistrationModuleWidget::onNumberIterationsChanged(int value) {
-  Q_D(qSlicerRegistrationModuleWidget);
+void qSlicerFeatureletRegistrationModuleWidget::onNumberIterationsChanged(int value) {
+  Q_D(qSlicerFeatureletRegistrationModuleWidget);
 
-  vtkMRMLRegistrationNode* paramNode = d->logic()->GetRegistrationNode();
+  vtkMRMLFeatureletRegistrationNode* paramNode = d->logic()->GetFeatureletRegistrationNode();
   if ( !paramNode || !this->mrmlScene())
     return;
 
@@ -705,10 +705,10 @@ void qSlicerRegistrationModuleWidget::onNumberIterationsChanged(int value) {
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerRegistrationModuleWidget::onSimilarityMeasureChanged(bool correl) {
-  Q_D(qSlicerRegistrationModuleWidget);
+void qSlicerFeatureletRegistrationModuleWidget::onSimilarityMeasureChanged(bool correl) {
+  Q_D(qSlicerFeatureletRegistrationModuleWidget);
 
-  vtkMRMLRegistrationNode* paramNode = d->logic()->GetRegistrationNode();
+  vtkMRMLFeatureletRegistrationNode* paramNode = d->logic()->GetFeatureletRegistrationNode();
   if ( !paramNode || !this->mrmlScene())
       return;
 
@@ -722,10 +722,10 @@ void qSlicerRegistrationModuleWidget::onSimilarityMeasureChanged(bool correl) {
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerRegistrationModuleWidget::onInterpolationTypeChanged(bool linear) {
-  Q_D(qSlicerRegistrationModuleWidget);
+void qSlicerFeatureletRegistrationModuleWidget::onInterpolationTypeChanged(bool linear) {
+  Q_D(qSlicerFeatureletRegistrationModuleWidget);
 
-  vtkMRMLRegistrationNode* paramNode = d->logic()->GetRegistrationNode();
+  vtkMRMLFeatureletRegistrationNode* paramNode = d->logic()->GetFeatureletRegistrationNode();
   if ( !paramNode || !this->mrmlScene())
     return;
 
@@ -739,10 +739,10 @@ void qSlicerRegistrationModuleWidget::onInterpolationTypeChanged(bool linear) {
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerRegistrationModuleWidget::oncheckBoxFiducialChanged(bool clicked) {
-  Q_D(qSlicerRegistrationModuleWidget);
+void qSlicerFeatureletRegistrationModuleWidget::oncheckBoxFiducialChanged(bool clicked) {
+  Q_D(qSlicerFeatureletRegistrationModuleWidget);
 
-  vtkMRMLRegistrationNode* paramNode = d->logic()->GetRegistrationNode();
+  vtkMRMLFeatureletRegistrationNode* paramNode = d->logic()->GetFeatureletRegistrationNode();
   if ( !paramNode || !this->mrmlScene())
     return;
 
@@ -755,10 +755,10 @@ void qSlicerRegistrationModuleWidget::oncheckBoxFiducialChanged(bool clicked) {
     std::cerr << "Is Fiducial Checkbox clicked? " << clicked << std::endl;
 }
 
-void qSlicerRegistrationModuleWidget::oncheckBoxDebugChanged(bool clicked) {
-  Q_D(qSlicerRegistrationModuleWidget);
+void qSlicerFeatureletRegistrationModuleWidget::oncheckBoxDebugChanged(bool clicked) {
+  Q_D(qSlicerFeatureletRegistrationModuleWidget);
 
-  vtkMRMLRegistrationNode* paramNode = d->logic()->GetRegistrationNode();
+  vtkMRMLFeatureletRegistrationNode* paramNode = d->logic()->GetFeatureletRegistrationNode();
   if ( !paramNode || !this->mrmlScene())
     return;
 
@@ -771,10 +771,10 @@ void qSlicerRegistrationModuleWidget::oncheckBoxDebugChanged(bool clicked) {
     std::cerr << "Is Debug Checkbox clicked? " << clicked << std::endl;
 }
 
-void qSlicerRegistrationModuleWidget::oncheckBoxRigidChanged(bool clicked) {
-  Q_D(qSlicerRegistrationModuleWidget);
+void qSlicerFeatureletRegistrationModuleWidget::oncheckBoxRigidChanged(bool clicked) {
+  Q_D(qSlicerFeatureletRegistrationModuleWidget);
 
-  vtkMRMLRegistrationNode* paramNode = d->logic()->GetRegistrationNode();
+  vtkMRMLFeatureletRegistrationNode* paramNode = d->logic()->GetFeatureletRegistrationNode();
   if ( !paramNode || !this->mrmlScene())
     return;
 
@@ -787,10 +787,10 @@ void qSlicerRegistrationModuleWidget::oncheckBoxRigidChanged(bool clicked) {
     std::cerr << "Is Rigid Checkbox clicked? " << clicked << std::endl;
 }
 
-void qSlicerRegistrationModuleWidget::oncheckBoxZDifferentChanged(bool clicked) {
-  Q_D(qSlicerRegistrationModuleWidget);
+void qSlicerFeatureletRegistrationModuleWidget::oncheckBoxZDifferentChanged(bool clicked) {
+  Q_D(qSlicerFeatureletRegistrationModuleWidget);
 
-  vtkMRMLRegistrationNode* paramNode = d->logic()->GetRegistrationNode();
+  vtkMRMLFeatureletRegistrationNode* paramNode = d->logic()->GetFeatureletRegistrationNode();
   if ( !paramNode || !this->mrmlScene())
     return;
 
@@ -805,7 +805,7 @@ void qSlicerRegistrationModuleWidget::oncheckBoxZDifferentChanged(bool clicked) 
 
 // Helping Methode taken from SlicerRTCommon
 //----------------------------------------------------------------------------
-bool qSlicerRegistrationModuleWidget::IsStringNullOrEmpty(char* aString) {
+bool qSlicerFeatureletRegistrationModuleWidget::IsStringNullOrEmpty(char* aString) {
   if (aString == NULL) {
     return true;
   }

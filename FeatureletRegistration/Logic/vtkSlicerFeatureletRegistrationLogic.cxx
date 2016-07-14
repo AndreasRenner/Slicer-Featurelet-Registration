@@ -16,8 +16,8 @@
 ==============================================================================*/
 
 // Registration Logic includes
-#include "vtkMRMLRegistrationNode.h"
-#include "vtkSlicerRegistrationLogic.h"
+#include "vtkMRMLFeatureletRegistrationNode.h"
+#include "vtkSlicerFeatureletRegistrationLogic.h"
 #include "vtkSlicerVolumesLogic.h"
 
 // MRML includes
@@ -28,7 +28,7 @@
 #include <vtkMRMLLinearTransformNode.h>
 #include <vtkMRMLMarkupsFiducialNode.h>
 #include <vtkMRMLMarkupsNode.h>
-#include <vtkMRMLRegistrationNode.h>
+#include <vtkMRMLFeatureletRegistrationNode.h>
 #include <vtkMRMLScalarVolumeDisplayNode.h>
 #include <vtkMRMLScene.h>
 #include <vtkMRMLSelectionNode.h>
@@ -61,54 +61,54 @@
 #include <iostream>
 
 //----------------------------------------------------------------------------
-class vtkSlicerRegistrationLogic::vtkInternal {
+class vtkSlicerFeatureletRegistrationLogic::vtkInternal {
 public:
   vtkInternal();
   vtkSlicerVolumesLogic* VolumesLogic;
 };
 
 //----------------------------------------------------------------------------
-vtkSlicerRegistrationLogic::vtkInternal::vtkInternal() {
+vtkSlicerFeatureletRegistrationLogic::vtkInternal::vtkInternal() {
   this->VolumesLogic = 0;
 }
 
 //----------------------------------------------------------------------------
-vtkStandardNewMacro(vtkSlicerRegistrationLogic);
+vtkStandardNewMacro(vtkSlicerFeatureletRegistrationLogic);
 
 //----------------------------------------------------------------------------
-vtkSlicerRegistrationLogic::vtkSlicerRegistrationLogic() {
+vtkSlicerFeatureletRegistrationLogic::vtkSlicerFeatureletRegistrationLogic() {
   this->Internal = new vtkInternal;
-  this->RegistrationNode = NULL;
+  this->FeatureletRegistrationNode = NULL;
 }
 
 //----------------------------------------------------------------------------
-vtkSlicerRegistrationLogic::~vtkSlicerRegistrationLogic() {
+vtkSlicerFeatureletRegistrationLogic::~vtkSlicerFeatureletRegistrationLogic() {
   delete this->Internal;
-  this->SetAndObserveRegistrationNode(NULL); //release the node object to avoid memory leaks
+  this->SetAndObserveFeatureletRegistrationNode(NULL); //release the node object to avoid memory leaks
 }
 
 //----------------------------------------------------------------------------
-void vtkSlicerRegistrationLogic::SetVolumesLogic(vtkSlicerVolumesLogic* logic) {
+void vtkSlicerFeatureletRegistrationLogic::SetVolumesLogic(vtkSlicerVolumesLogic* logic) {
   this->Internal->VolumesLogic = logic;
 }
 
 //----------------------------------------------------------------------------
-vtkSlicerVolumesLogic* vtkSlicerRegistrationLogic::GetVolumesLogic() {
+vtkSlicerVolumesLogic* vtkSlicerFeatureletRegistrationLogic::GetVolumesLogic() {
   return this->Internal->VolumesLogic;
 }
 
 //----------------------------------------------------------------------------
-void vtkSlicerRegistrationLogic::PrintSelf(ostream& os, vtkIndent indent) {
+void vtkSlicerFeatureletRegistrationLogic::PrintSelf(ostream& os, vtkIndent indent) {
   this->Superclass::PrintSelf(os, indent);
 }
 
 //----------------------------------------------------------------------------
-void vtkSlicerRegistrationLogic::SetAndObserveRegistrationNode(vtkMRMLRegistrationNode *node) {
-  vtkSetAndObserveMRMLNodeMacro(this->RegistrationNode, node);
+void vtkSlicerFeatureletRegistrationLogic::SetAndObserveFeatureletRegistrationNode(vtkMRMLFeatureletRegistrationNode *node) {
+  vtkSetAndObserveMRMLNodeMacro(this->FeatureletRegistrationNode, node);
 }
 
 //---------------------------------------------------------------------------
-void vtkSlicerRegistrationLogic::SetMRMLSceneInternal(vtkMRMLScene * newScene) {
+void vtkSlicerFeatureletRegistrationLogic::SetMRMLSceneInternal(vtkMRMLScene * newScene) {
   vtkNew<vtkIntArray> events;
   events->InsertNextValue(vtkMRMLScene::NodeAddedEvent);
   events->InsertNextValue(vtkMRMLScene::NodeRemovedEvent);
@@ -119,7 +119,7 @@ void vtkSlicerRegistrationLogic::SetMRMLSceneInternal(vtkMRMLScene * newScene) {
 }
 
 //----------------------------------------------------------------------------
-int vtkSlicerRegistrationLogic::RunClicked(vtkMRMLRegistrationNode* pnode) {
+int vtkSlicerFeatureletRegistrationLogic::RunClicked(vtkMRMLFeatureletRegistrationNode* pnode) {
   vtkMRMLScene *scene = this->GetMRMLScene();
 
   bool debugMode = pnode->GetcheckBoxDebug();
@@ -131,7 +131,7 @@ int vtkSlicerRegistrationLogic::RunClicked(vtkMRMLRegistrationNode* pnode) {
     std::cerr << "Deformation Field Node: " << pnode->GetDeformationFieldID() << std::endl;
   }
 
-  //Get the needed data from the RegistrationNode
+  //Get the needed data from the FeatureletRegistrationNode
   vtkMRMLVolumeNode *fixedImage =
     vtkMRMLVolumeNode::SafeDownCast(scene->GetNodeByID(pnode->GetFixedImageNodeID()));
   vtkMRMLVolumeNode *movingImage =
@@ -166,15 +166,15 @@ int vtkSlicerRegistrationLogic::RunClicked(vtkMRMLRegistrationNode* pnode) {
   }
 
   if(!fixedImage || !movingImage) {
-    std::cerr << "Registration: Failed to look up fixed/moving image!" << std::endl;
+    std::cerr << "FeatureletRegistration: Failed to look up fixed/moving image!" << std::endl;
     return -1;
   }
   if(!deformedImage || !deformationField) {
-    std::cerr << "Registration: Deformed Image/Deformation field not initialized" << std::endl;
+    std::cerr << "FeatureletRegistration: Deformed Image/Deformation field not initialized" << std::endl;
     return -1;
   }
   if(UseFiducialPoints && !fiducialPoints){
-    std::cerr << "Registration: Failed to look up fiducial points!" << std::endl;
+    std::cerr << "FeatureletRegistration: Failed to look up fiducial points!" << std::endl;
     return -1;
   }
 
@@ -185,7 +185,7 @@ int vtkSlicerRegistrationLogic::RunClicked(vtkMRMLRegistrationNode* pnode) {
   vtkMRMLScalarVolumeNode *svnode = vtkMRMLScalarVolumeNode::SafeDownCast(movingImage);
 
   if(!this->Internal->VolumesLogic) {
-    std::cerr << "Registration: ERROR: failed to get hold of Volumes logic" << std::endl;
+    std::cerr << "FeatureletRegistration: ERROR: failed to get hold of Volumes logic" << std::endl;
     return -2;
   }
 
@@ -194,15 +194,15 @@ int vtkSlicerRegistrationLogic::RunClicked(vtkMRMLRegistrationNode* pnode) {
   deformedImage->SetName(outSS.str().c_str());
 
   if(dtvnode) {
-    std::cerr << "Registration: ERROR: Diffusion tensor volume not supported by this module!" << std::endl;
+    std::cerr << "FeatureletRegistration: ERROR: Diffusion tensor volume not supported by this module!" << std::endl;
     return -2;
   }
   else if(dwvnode) {
-    std::cerr << "Registration: ERROR: Diffusion weighted volume not supported by this module!" << std::endl;
+    std::cerr << "FeatureletRegistration: ERROR: Diffusion weighted volume not supported by this module!" << std::endl;
     return -2;
   }
   else if(vvnode) {
-    std::cerr << "Registration: ERROR: Vector volume not supported by this module!" << std::endl;
+    std::cerr << "FeatureletRegistration: ERROR: Vector volume not supported by this module!" << std::endl;
     return -2;
   }
   else if(svnode)
@@ -218,15 +218,15 @@ int vtkSlicerRegistrationLogic::RunClicked(vtkMRMLRegistrationNode* pnode) {
   svnode = vtkMRMLScalarVolumeNode::SafeDownCast(fixedImage);
 
   if(dtvnode) {
-    std::cerr << "Registration: ERROR: Diffusion tensor volume not supported by this module!" << std::endl;
+    std::cerr << "FeatureletRegistration: ERROR: Diffusion tensor volume not supported by this module!" << std::endl;
     return -2;
   }
   else if(dwvnode) {
-    std::cerr << "Registration: ERROR: Diffusion weighted volume not supported by this module!" << std::endl;
+    std::cerr << "FeatureletRegistration: ERROR: Diffusion weighted volume not supported by this module!" << std::endl;
     return -2;
   }
   else if(vvnode) {
-    std::cerr << "Registration: ERROR: Vector volume not supported by this module!" << std::endl;
+    std::cerr << "FeatureletRegistration: ERROR: Vector volume not supported by this module!" << std::endl;
     return -2;
   }
   else if(svnode)
@@ -538,7 +538,7 @@ int vtkSlicerRegistrationLogic::RunClicked(vtkMRMLRegistrationNode* pnode) {
 }
 
 //-----------------------------------------------------------------------------
-int vtkSlicerRegistrationLogic::ShowVolume(vtkMRMLRegistrationNode* pnode, bool fixedImage) {
+int vtkSlicerFeatureletRegistrationLogic::ShowVolume(vtkMRMLFeatureletRegistrationNode* pnode, bool fixedImage) {
   vtkMRMLScene *scene = this->GetMRMLScene();
 
   vtkMRMLVolumeNode *fixedImageNode =
@@ -562,23 +562,23 @@ int vtkSlicerRegistrationLogic::ShowVolume(vtkMRMLRegistrationNode* pnode, bool 
 }
 
 //-----------------------------------------------------------------------------
-void vtkSlicerRegistrationLogic::RegisterNodes() {
+void vtkSlicerFeatureletRegistrationLogic::RegisterNodes() {
   if(!this->GetMRMLScene()) {
     return;
   }
-  vtkMRMLRegistrationNode* pNode = vtkMRMLRegistrationNode::New();
+  vtkMRMLFeatureletRegistrationNode* pNode = vtkMRMLFeatureletRegistrationNode::New();
   this->GetMRMLScene()->RegisterNodeClass(pNode);
   pNode->Delete();
 }
 
 //---------------------------------------------------------------------------
-void vtkSlicerRegistrationLogic::UpdateFromMRMLScene() {
+void vtkSlicerFeatureletRegistrationLogic::UpdateFromMRMLScene() {
   assert(this->GetMRMLScene() != 0);
   this->Modified();
 }
 
 //---------------------------------------------------------------------------
-void vtkSlicerRegistrationLogic::OnMRMLSceneNodeAdded(vtkMRMLNode* node) {
+void vtkSlicerFeatureletRegistrationLogic::OnMRMLSceneNodeAdded(vtkMRMLNode* node) {
   if(!node || !this->GetMRMLScene())
     return;
 
@@ -587,7 +587,7 @@ void vtkSlicerRegistrationLogic::OnMRMLSceneNodeAdded(vtkMRMLNode* node) {
 }
 
 //---------------------------------------------------------------------------
-void vtkSlicerRegistrationLogic::OnMRMLSceneNodeRemoved(vtkMRMLNode* node) {
+void vtkSlicerFeatureletRegistrationLogic::OnMRMLSceneNodeRemoved(vtkMRMLNode* node) {
   if(!node || !this->GetMRMLScene())
     return;
 
@@ -596,26 +596,26 @@ void vtkSlicerRegistrationLogic::OnMRMLSceneNodeRemoved(vtkMRMLNode* node) {
 }
 
 //---------------------------------------------------------------------------
-void vtkSlicerRegistrationLogic::OnMRMLSceneEndImport() {
+void vtkSlicerFeatureletRegistrationLogic::OnMRMLSceneEndImport() {
   // If we have a parameter node select it
-  vtkMRMLRegistrationNode *paramNode = NULL;
-  vtkMRMLNode *node = this->GetMRMLScene()->GetNthNodeByClass(0, "vtkMRMLRegistrationNode");
+  vtkMRMLFeatureletRegistrationNode *paramNode = NULL;
+  vtkMRMLNode *node = this->GetMRMLScene()->GetNthNodeByClass(0, "vtkMRMLFeatureletRegistrationNode");
   if (node) {
-    paramNode = vtkMRMLRegistrationNode::SafeDownCast(node);
-    vtkSetAndObserveMRMLNodeMacro(this->RegistrationNode, paramNode);
+    paramNode = vtkMRMLFeatureletRegistrationNode::SafeDownCast(node);
+    vtkSetAndObserveMRMLNodeMacro(this->FeatureletRegistrationNode, paramNode);
   }
   this->Modified();
 }
 
 //---------------------------------------------------------------------------
-void vtkSlicerRegistrationLogic::OnMRMLSceneEndClose() {
+void vtkSlicerFeatureletRegistrationLogic::OnMRMLSceneEndClose() {
   this->Modified();
 }
 
 
 // From Slicer-RT-commons
 //---------------------------------------------------------------------------
-bool vtkSlicerRegistrationLogic::ConvertVolumeNodeToItkImage(vtkMRMLVolumeNode* inVolumeNode,
+bool vtkSlicerFeatureletRegistrationLogic::ConvertVolumeNodeToItkImage(vtkMRMLVolumeNode* inVolumeNode,
                                                              ImageType::Pointer outItkVolume) {
   if ( inVolumeNode == NULL ) {
     std::cerr << "Failed to convert volume node to itk image - input MRML volume node is NULL!" << std::endl;
@@ -717,7 +717,7 @@ bool vtkSlicerRegistrationLogic::ConvertVolumeNodeToItkImage(vtkMRMLVolumeNode* 
 }
 
 
-int vtkSlicerRegistrationLogic::ResampleVolumesToBeIsotropic(ImageType* Image) {
+int vtkSlicerFeatureletRegistrationLogic::ResampleVolumesToBeIsotropic(ImageType* Image) {
   typedef float InternalPixelType;
   typedef itk::Image< InternalPixelType, Dimension > InternalImageType;
   typedef itk::RecursiveGaussianImageFilter< ImageType, InternalImageType > GaussianFilterType;
@@ -788,7 +788,7 @@ int vtkSlicerRegistrationLogic::ResampleVolumesToBeIsotropic(ImageType* Image) {
   return EXIT_SUCCESS;
 }
 
-int vtkSlicerRegistrationLogic::SubsampleVolume(const ImageType::Pointer Image,
+int vtkSlicerFeatureletRegistrationLogic::SubsampleVolume(const ImageType::Pointer Image,
                                                 ImageType::SizeType FeatureletSize,
                                                 ImageType::SizeType SearchRegionSize,
                                                 ImageType::IndexType ImageIndex,
@@ -847,7 +847,7 @@ int vtkSlicerRegistrationLogic::SubsampleVolume(const ImageType::Pointer Image,
 }
 
 
-Featurelet::Status vtkSlicerRegistrationLogic::CheckFeaturelet(bool fixed, bool FiducialPoints,
+Featurelet::Status vtkSlicerFeatureletRegistrationLogic::CheckFeaturelet(bool fixed, bool FiducialPoints,
                                                                vtkMRMLMarkupsFiducialNode *Fiducials) {
   ImageType::SizeType FeatureletSize;
   if (fixed) {
@@ -914,7 +914,7 @@ Featurelet::Status vtkSlicerRegistrationLogic::CheckFeaturelet(bool fixed, bool 
 
 
 // Registration for Correlation and linear interpolation
-FeatureletRegistrationResult::Pointer vtkSlicerRegistrationLogic::RegisterVolumes1
+FeatureletRegistrationResult::Pointer vtkSlicerFeatureletRegistrationLogic::RegisterVolumes1
           (ImageType* FixedImage, ImageType* MovingImage, bool debugMode, bool rigid) {
   FeatureletRegistrationResultPointer regResult;
   regResult = FeatureletRegistrationResultType::New();
@@ -989,7 +989,7 @@ FeatureletRegistrationResult::Pointer vtkSlicerRegistrationLogic::RegisterVolume
 }
 
 // Registration for Correlation and neighbour interpolation
-FeatureletRegistrationResult::Pointer vtkSlicerRegistrationLogic::RegisterVolumes2
+FeatureletRegistrationResult::Pointer vtkSlicerFeatureletRegistrationLogic::RegisterVolumes2
           (ImageType* FixedImage, ImageType* MovingImage, bool debugMode, bool rigid) {
   FeatureletRegistrationResultPointer regResult;
   regResult = FeatureletRegistrationResultType::New();
@@ -1062,7 +1062,7 @@ FeatureletRegistrationResult::Pointer vtkSlicerRegistrationLogic::RegisterVolume
 }
 
 // Registration for Mutual Information and neighbour interpolation
-FeatureletRegistrationResult::Pointer vtkSlicerRegistrationLogic::RegisterVolumesI
+FeatureletRegistrationResult::Pointer vtkSlicerFeatureletRegistrationLogic::RegisterVolumesI
           (bool debugMode, bool rigid) {
   FeatureletRegistrationResultPointer regResult;
   regResult = FeatureletRegistrationResultType::New();
@@ -1154,7 +1154,7 @@ FeatureletRegistrationResult::Pointer vtkSlicerRegistrationLogic::RegisterVolume
 }
 
 // Registration for Mutual Information and linear interpolation
-FeatureletRegistrationResult::Pointer vtkSlicerRegistrationLogic::RegisterVolumesII
+FeatureletRegistrationResult::Pointer vtkSlicerFeatureletRegistrationLogic::RegisterVolumesII
           (bool debugMode, bool rigid) {
   FeatureletRegistrationResultPointer regResult;
   regResult = FeatureletRegistrationResultType::New();

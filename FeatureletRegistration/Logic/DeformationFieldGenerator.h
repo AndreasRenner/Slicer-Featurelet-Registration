@@ -11,7 +11,7 @@
 
 #endif /* DEFORMATIONFIELDGENERATOR_H_ */
 
-#include "vtkSlicerRegistrationLogic.h"
+#include "vtkSlicerFeatureletRegistrationLogic.h"
 
 #include "itkExceptionObject.h"
 #include "itkIdentityTransform.h"

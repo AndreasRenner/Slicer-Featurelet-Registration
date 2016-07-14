@@ -15,25 +15,25 @@
 
 ==============================================================================*/
 
-// .NAME vtkSlicerRegistrationLogic - slicer logic class for volumes manipulation
+// .NAME vtkSlicerFeatureletRegistrationLogic - slicer logic class for volumes manipulation
 // .SECTION Description
 // This class manages the logic associated with reading, saving,
 // and changing propertied of the volumes
 
 
-#ifndef __vtkSlicerRegistrationLogic_h
-#define __vtkSlicerRegistrationLogic_h
+#ifndef __vtkSlicerFeatureletRegistrationLogic_h
+#define __vtkSlicerFeatureletRegistrationLogic_h
 
 // Slicer includes
 #include "vtkSlicerModuleLogic.h"
-#include "vtkSlicerRegistrationModuleLogicExport.h"
+#include "vtkSlicerFeatureletRegistrationModuleLogicExport.h"
 #include "FeatureletRegistrationResult.h"
 class vtkSlicerMarkupsLogic;
 class vtkSlicerVolumesLogic;
 class vtkMRMLMarkupsFiducialNode;
 class vtkMRMLMarkupsNode;
 class vtkMRMLVolumeNode;
-class vtkMRMLRegistrationNode;
+class vtkMRMLFeatureletRegistrationNode;
 
 // STD includes
 #include <cstdlib>
@@ -110,22 +110,22 @@ typedef FeatureletRegistrationResultType::Pointer FeatureletRegistrationResultPo
 
 
 /// \ingroup Slicer_QtModules_ExtensionTemplate
-class VTK_SLICER_REGISTRATION_MODULE_LOGIC_EXPORT vtkSlicerRegistrationLogic :
+class VTK_SLICER_FEATURELETREGISTRATION_MODULE_LOGIC_EXPORT vtkSlicerFeatureletRegistrationLogic :
   public vtkSlicerModuleLogic
 {
 public:
-  static vtkSlicerRegistrationLogic *New();
-  vtkTypeMacro(vtkSlicerRegistrationLogic, vtkSlicerModuleLogic);
+  static vtkSlicerFeatureletRegistrationLogic *New();
+  vtkTypeMacro(vtkSlicerFeatureletRegistrationLogic, vtkSlicerModuleLogic);
   void PrintSelf(ostream& os, vtkIndent indent);
-  void SetAndObserveRegistrationNode(vtkMRMLRegistrationNode* node);
+  void SetAndObserveFeatureletRegistrationNode(vtkMRMLFeatureletRegistrationNode* node);
 
   void SetVolumesLogic(vtkSlicerVolumesLogic* logic);
   vtkSlicerVolumesLogic* GetVolumesLogic();
 
-  int RunClicked(vtkMRMLRegistrationNode*);
-  int ShowVolume(vtkMRMLRegistrationNode*, bool);
+  int RunClicked(vtkMRMLFeatureletRegistrationNode*);
+  int ShowVolume(vtkMRMLFeatureletRegistrationNode*, bool);
 
-  vtkGetObjectMacro(RegistrationNode, vtkMRMLRegistrationNode);
+  vtkGetObjectMacro(FeatureletRegistrationNode, vtkMRMLFeatureletRegistrationNode);
 
   bool ConvertVolumeNodeToItkImage(vtkMRMLVolumeNode*, itk::Image<PixelType, Dimension>::Pointer);
   int SubsampleVolume( const ImageType::Pointer Image,
@@ -142,8 +142,8 @@ public:
 
 
 protected:
-  vtkSlicerRegistrationLogic();
-  virtual ~vtkSlicerRegistrationLogic();
+  vtkSlicerFeatureletRegistrationLogic();
+  virtual ~vtkSlicerFeatureletRegistrationLogic();
 
   virtual void SetMRMLSceneInternal(vtkMRMLScene* newScene);
   //Register MRML Node classes to Scene. Gets called automatically when MRMLScene is attached to this logic class.
@@ -154,11 +154,11 @@ protected:
   virtual void OnMRMLSceneEndImport();
   virtual void OnMRMLSceneEndClose();
 
-  vtkMRMLRegistrationNode* RegistrationNode;
+  vtkMRMLFeatureletRegistrationNode* FeatureletRegistrationNode;
 
 private:
-  vtkSlicerRegistrationLogic(const vtkSlicerRegistrationLogic&); // Not implemented
-  void operator=(const vtkSlicerRegistrationLogic&); // Not implemented
+  vtkSlicerFeatureletRegistrationLogic(const vtkSlicerFeatureletRegistrationLogic&); // Not implemented
+  void operator=(const vtkSlicerFeatureletRegistrationLogic&); // Not implemented
 
   class vtkInternal;
   vtkInternal* Internal;

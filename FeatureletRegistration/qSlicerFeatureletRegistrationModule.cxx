@@ -23,47 +23,47 @@
 #include <qSlicerCoreApplication.h>
 #include <qSlicerModuleManager.h>
 
-// Registration Logic includes
-#include <vtkSlicerRegistrationLogic.h>
+// FeatureletRegistration Logic includes
+#include <vtkSlicerFeatureletRegistrationLogic.h>
 #include <vtkSlicerVolumesLogic.h>
 
-// Registration includes
-#include "qSlicerRegistrationModule.h"
-#include "qSlicerRegistrationModuleWidget.h"
+// FeatureletRegistration includes
+#include "qSlicerFeatureletRegistrationModule.h"
+#include "qSlicerFeatureletRegistrationModuleWidget.h"
 
 //-----------------------------------------------------------------------------
-Q_EXPORT_PLUGIN2(qSlicerRegistrationModule, qSlicerRegistrationModule);
+Q_EXPORT_PLUGIN2(qSlicerFeatureletRegistrationModule, qSlicerFeatureletRegistrationModule);
 
 //-----------------------------------------------------------------------------
 /// \ingroup Slicer_QtModules_ExtensionTemplate
-class qSlicerRegistrationModulePrivate
+class qSlicerFeatureletRegistrationModulePrivate
 {
 public:
-  qSlicerRegistrationModulePrivate();
+  qSlicerFeatureletRegistrationModulePrivate();
 };
 
 //-----------------------------------------------------------------------------
-// qSlicerRegistrationModulePrivate methods
+// qSlicerFeatureletRegistrationModulePrivate methods
 
 //-----------------------------------------------------------------------------
-qSlicerRegistrationModulePrivate::qSlicerRegistrationModulePrivate() {
+qSlicerFeatureletRegistrationModulePrivate::qSlicerFeatureletRegistrationModulePrivate() {
 }
 
 //-----------------------------------------------------------------------------
-// qSlicerRegistrationModule methods
+// qSlicerFeatureletRegistrationModule methods
 
 //-----------------------------------------------------------------------------
-qSlicerRegistrationModule::qSlicerRegistrationModule(QObject* _parent)
+qSlicerFeatureletRegistrationModule::qSlicerFeatureletRegistrationModule(QObject* _parent)
   : Superclass(_parent)
-  , d_ptr(new qSlicerRegistrationModulePrivate) {
+  , d_ptr(new qSlicerFeatureletRegistrationModulePrivate) {
 }
 
 //-----------------------------------------------------------------------------
-qSlicerRegistrationModule::~qSlicerRegistrationModule() {
+qSlicerFeatureletRegistrationModule::~qSlicerFeatureletRegistrationModule() {
 }
 
 //-----------------------------------------------------------------------------
-QString qSlicerRegistrationModule::helpText() const {
+QString qSlicerFeatureletRegistrationModule::helpText() const {
   QString help =
     "The ,,Featurelet-Registration'' module uses pixeltype short. To convert an image from another "
     "pixeltype use e.g. the module ,,Cast Scalar Volume''.<br>"
@@ -77,7 +77,7 @@ QString qSlicerRegistrationModule::helpText() const {
 }
 
 //-----------------------------------------------------------------------------
-QString qSlicerRegistrationModule::acknowledgementText() const {
+QString qSlicerFeatureletRegistrationModule::acknowledgementText() const {
   QString acknowledgement =
     "The ,,Featurelet-Registration'' module was developed as a Master Thesis at AKH Vienna "
     "under supervision of Univ.-Prof. Dietmar Georg and Hugo Furtado.<br>"
@@ -88,40 +88,40 @@ QString qSlicerRegistrationModule::acknowledgementText() const {
 }
 
 //-----------------------------------------------------------------------------
-QStringList qSlicerRegistrationModule::contributors() const {
+QStringList qSlicerFeatureletRegistrationModule::contributors() const {
   QStringList moduleContributors;
   moduleContributors << QString("Andreas Renner (Vienna UT)");
   return moduleContributors;
 }
 
 //-----------------------------------------------------------------------------
-QIcon qSlicerRegistrationModule::icon() const {
+QIcon qSlicerFeatureletRegistrationModule::icon() const {
   return QIcon(":/Icons/Registration.png");
 }
 
 //-----------------------------------------------------------------------------
-QStringList qSlicerRegistrationModule::categories() const {
+QStringList qSlicerFeatureletRegistrationModule::categories() const {
   return QStringList() << "Registration";
 }
 
 //-----------------------------------------------------------------------------
-QStringList qSlicerRegistrationModule::dependencies() const {
+QStringList qSlicerFeatureletRegistrationModule::dependencies() const {
   return QStringList() << "Volumes";
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerRegistrationModule::setup() {
+void qSlicerFeatureletRegistrationModule::setup() {
   this->Superclass::setup();
 
-  vtkSlicerRegistrationLogic* RegistrationLogic =
-    vtkSlicerRegistrationLogic::SafeDownCast(this->logic());
+  vtkSlicerFeatureletRegistrationLogic* FeatureletRegistrationLogic =
+    vtkSlicerFeatureletRegistrationLogic::SafeDownCast(this->logic());
 
   qSlicerAbstractCoreModule* volumesModule =
     qSlicerCoreApplication::application()->moduleManager()->module("Volumes");
   if (volumesModule) {
     vtkSlicerVolumesLogic* volumesLogic =
       vtkSlicerVolumesLogic::SafeDownCast(volumesModule->logic());
-    RegistrationLogic->SetVolumesLogic(volumesLogic);
+    FeatureletRegistrationLogic->SetVolumesLogic(volumesLogic);
   }
   else {
     qWarning() << "Volumes module is not found";
@@ -129,11 +129,11 @@ void qSlicerRegistrationModule::setup() {
 }
 
 //-----------------------------------------------------------------------------
-qSlicerAbstractModuleRepresentation* qSlicerRegistrationModule::createWidgetRepresentation() {
-  return new qSlicerRegistrationModuleWidget;
+qSlicerAbstractModuleRepresentation* qSlicerFeatureletRegistrationModule::createWidgetRepresentation() {
+  return new qSlicerFeatureletRegistrationModuleWidget;
 }
 
 //-----------------------------------------------------------------------------
-vtkMRMLAbstractLogic* qSlicerRegistrationModule::createLogic() {
-  return vtkSlicerRegistrationLogic::New();
+vtkMRMLAbstractLogic* qSlicerFeatureletRegistrationModule::createLogic() {
+  return vtkSlicerFeatureletRegistrationLogic::New();
 }

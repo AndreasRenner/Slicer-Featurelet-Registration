@@ -6,7 +6,7 @@ See COPYRIGHT.txt
 or http://www.slicer.org/copyright/copyright.txt for details.
 
 Program:   3D Slicer
-Module:    $RCSfile: vtkMRMLRegistrationNode.cxx,v $
+Module:    $RCSfile: vtkMRMLFeatureletRegistrationNode.cxx,v $
 Date:      $Date: 2006/03/17 15:10:10 $
 Version:   $Revision: 1.2 $
 
@@ -21,7 +21,7 @@ Version:   $Revision: 1.2 $
 #include "vtkMRMLVolumeNode.h"
 
 // CropModuleMRML includes
-#include "vtkMRMLRegistrationNode.h"
+#include "vtkMRMLFeatureletRegistrationNode.h"
 
 // AnnotationModuleMRML includes
 #include "vtkMRMLAnnotationROINode.h"
@@ -30,10 +30,10 @@ Version:   $Revision: 1.2 $
 #include <sstream>
 
 //----------------------------------------------------------------------------
-vtkMRMLNodeNewMacro(vtkMRMLRegistrationNode);
+vtkMRMLNodeNewMacro(vtkMRMLFeatureletRegistrationNode);
 
 //----------------------------------------------------------------------------
-vtkMRMLRegistrationNode::vtkMRMLRegistrationNode() {
+vtkMRMLFeatureletRegistrationNode::vtkMRMLFeatureletRegistrationNode() {
   this->HideFromEditors = 1;
 
   this->FixedImageNodeID = NULL;
@@ -62,7 +62,7 @@ vtkMRMLRegistrationNode::vtkMRMLRegistrationNode() {
 }
 
 //----------------------------------------------------------------------------
-vtkMRMLRegistrationNode::~vtkMRMLRegistrationNode() {
+vtkMRMLFeatureletRegistrationNode::~vtkMRMLFeatureletRegistrationNode() {
   if (this->FixedImageNodeID) {
     this->SetFixedImageNodeID(NULL);
   }
@@ -84,8 +84,8 @@ vtkMRMLRegistrationNode::~vtkMRMLRegistrationNode() {
 }
 
 //----------------------------------------------------------------------------
-void vtkMRMLRegistrationNode::ReadXMLAttributes(const char** atts) {
-  std::cerr << "Reading Registration param node!" << std::endl;
+void vtkMRMLFeatureletRegistrationNode::ReadXMLAttributes(const char** atts) {
+  std::cerr << "Reading FeatureletRegistration node!" << std::endl;
   Superclass::ReadXMLAttributes(atts);
 
   const char* attName;
@@ -224,7 +224,7 @@ void vtkMRMLRegistrationNode::ReadXMLAttributes(const char** atts) {
 }
 
 //----------------------------------------------------------------------------
-void vtkMRMLRegistrationNode::WriteXML(ostream& of, int nIndent) {
+void vtkMRMLFeatureletRegistrationNode::WriteXML(ostream& of, int nIndent) {
   Superclass::WriteXML(of, nIndent);
 
   vtkIndent indent(nIndent);
@@ -254,11 +254,11 @@ void vtkMRMLRegistrationNode::WriteXML(ostream& of, int nIndent) {
 //----------------------------------------------------------------------------
 // Copy the node\"s attributes to this object.
 // Does NOT copy: ID, FilePrefix, Name, SliceID
-void vtkMRMLRegistrationNode::Copy(vtkMRMLNode *anode) {
+void vtkMRMLFeatureletRegistrationNode::Copy(vtkMRMLNode *anode) {
   Superclass::Copy(anode);
   this->DisableModifiedEventOn();
 
-  vtkMRMLRegistrationNode *node = vtkMRMLRegistrationNode::SafeDownCast(anode);
+  vtkMRMLFeatureletRegistrationNode *node = vtkMRMLFeatureletRegistrationNode::SafeDownCast(anode);
 
   this->SetAndObserveFixedImageNodeID(node->FixedImageNodeID);
   this->SetAndObserveMovingImageNodeID(node->MovingImageNodeID);
@@ -287,7 +287,7 @@ void vtkMRMLRegistrationNode::Copy(vtkMRMLNode *anode) {
 }
 
 //----------------------------------------------------------------------------
-void vtkMRMLRegistrationNode::PrintSelf(ostream& os, vtkIndent indent) {
+void vtkMRMLFeatureletRegistrationNode::PrintSelf(ostream& os, vtkIndent indent) {
   Superclass::PrintSelf(os,indent);
 
   os << "FixedImageNodeID: " << ( (this->FixedImageNodeID) ? this->FixedImageNodeID : "None" ) << "\n";
@@ -314,7 +314,7 @@ void vtkMRMLRegistrationNode::PrintSelf(ostream& os, vtkIndent indent) {
 }
 
 //----------------------------------------------------------------------------
-void vtkMRMLRegistrationNode::SetAndObserveFixedImageNodeID(const char* ID) {
+void vtkMRMLFeatureletRegistrationNode::SetAndObserveFixedImageNodeID(const char* ID) {
   if (this->FixedImageNodeID) {
     this->Scene->RemoveReferencedNodeID(this->FixedImageNodeID, this);
   }
@@ -326,7 +326,7 @@ void vtkMRMLRegistrationNode::SetAndObserveFixedImageNodeID(const char* ID) {
 }
 
 //----------------------------------------------------------------------------
-void vtkMRMLRegistrationNode::SetAndObserveMovingImageNodeID(const char* ID) {
+void vtkMRMLFeatureletRegistrationNode::SetAndObserveMovingImageNodeID(const char* ID) {
   if (this->MovingImageNodeID) {
     this->Scene->RemoveReferencedNodeID(this->MovingImageNodeID, this);
   }
@@ -338,7 +338,7 @@ void vtkMRMLRegistrationNode::SetAndObserveMovingImageNodeID(const char* ID) {
 }
 
 //----------------------------------------------------------------------------
-void vtkMRMLRegistrationNode::SetAndObserveDeformedImageNodeID(const char* ID) {
+void vtkMRMLFeatureletRegistrationNode::SetAndObserveDeformedImageNodeID(const char* ID) {
   if (this->DeformedImageNodeID) {
     this->Scene->RemoveReferencedNodeID(this->DeformedImageNodeID, this);
   }
@@ -350,7 +350,7 @@ void vtkMRMLRegistrationNode::SetAndObserveDeformedImageNodeID(const char* ID) {
 }
 
 //----------------------------------------------------------------------------
-void vtkMRMLRegistrationNode::SetAndObserveDeformationFieldID(const char* ID) {
+void vtkMRMLFeatureletRegistrationNode::SetAndObserveDeformationFieldID(const char* ID) {
   if (this->DeformationFieldID) {
     this->Scene->RemoveReferencedNodeID(this->DeformationFieldID, this);
   }
@@ -362,7 +362,7 @@ void vtkMRMLRegistrationNode::SetAndObserveDeformationFieldID(const char* ID) {
 }
 
 //----------------------------------------------------------------------------
-void vtkMRMLRegistrationNode::SetAndObserveFiducialPointsID(const char* ID) {
+void vtkMRMLFeatureletRegistrationNode::SetAndObserveFiducialPointsID(const char* ID) {
   if (this->FiducialPointsID) {
     this->Scene->RemoveReferencedNodeID(this->FiducialPointsID, this);
   }
@@ -374,7 +374,7 @@ void vtkMRMLRegistrationNode::SetAndObserveFiducialPointsID(const char* ID) {
 }
 
 //----------------------------------------------------------------------------
-void vtkMRMLRegistrationNode::SetAndObserveROINodeID(const char* ID) {
+void vtkMRMLFeatureletRegistrationNode::SetAndObserveROINodeID(const char* ID) {
   if (this->ROINodeID) {
     this->Scene->RemoveReferencedNodeID(this->ROINodeID, this);
   }
@@ -386,7 +386,7 @@ void vtkMRMLRegistrationNode::SetAndObserveROINodeID(const char* ID) {
 }
 
 //----------------------------------------------------------------------------
-void vtkMRMLRegistrationNode::UpdateReferenceID(const char *oldID, const char *newID) {
+void vtkMRMLFeatureletRegistrationNode::UpdateReferenceID(const char *oldID, const char *newID) {
   if (this->FixedImageNodeID && !strcmp(oldID, this->FixedImageNodeID)) {
     this->SetAndObserveFixedImageNodeID(newID);
   }

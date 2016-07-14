@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>qSlicerRegistrationModuleWidget</class>
- <widget class="qSlicerWidget" name="qSlicerRegistrationModuleWidget">
+ <class>qSlicerFeatureletRegistrationModuleWidget</class>
+ <widget class="qSlicerWidget" name="qSlicerFeatureletRegistrationModuleWidget">
   <property name="enabled">
    <bool>true</bool>
   </property>
@@ -810,7 +810,7 @@ The value of 0.001 is good for neighbour interpolation.</string>
  <resources/>
  <connections>
   <connection>
-   <sender>qSlicerRegistrationModuleWidget</sender>
+   <sender>qSlicerFeatureletRegistrationModuleWidget</sender>
    <signal>mrmlSceneChanged(vtkMRMLScene*)</signal>
    <receiver>FixedImageComboBox</receiver>
    <slot>setMRMLScene(vtkMRMLScene*)</slot>
@@ -826,7 +826,7 @@ The value of 0.001 is good for neighbour interpolation.</string>
    </hints>
   </connection>
   <connection>
-   <sender>qSlicerRegistrationModuleWidget</sender>
+   <sender>qSlicerFeatureletRegistrationModuleWidget</sender>
    <signal>mrmlSceneChanged(vtkMRMLScene*)</signal>
    <receiver>DeformedImageComboBox</receiver>
    <slot>setMRMLScene(vtkMRMLScene*)</slot>
@@ -842,7 +842,7 @@ The value of 0.001 is good for neighbour interpolation.</string>
    </hints>
   </connection>
   <connection>
-   <sender>qSlicerRegistrationModuleWidget</sender>
+   <sender>qSlicerFeatureletRegistrationModuleWidget</sender>
    <signal>mrmlSceneChanged(vtkMRMLScene*)</signal>
    <receiver>DeformationFieldComboBox</receiver>
    <slot>setMRMLScene(vtkMRMLScene*)</slot>
@@ -858,7 +858,7 @@ The value of 0.001 is good for neighbour interpolation.</string>
    </hints>
   </connection>
   <connection>
-   <sender>qSlicerRegistrationModuleWidget</sender>
+   <sender>qSlicerFeatureletRegistrationModuleWidget</sender>
    <signal>mrmlSceneChanged(vtkMRMLScene*)</signal>
    <receiver>MovingImageComboBox</receiver>
    <slot>setMRMLScene(vtkMRMLScene*)</slot>
@@ -874,7 +874,7 @@ The value of 0.001 is good for neighbour interpolation.</string>
    </hints>
   </connection>
   <connection>
-   <sender>qSlicerRegistrationModuleWidget</sender>
+   <sender>qSlicerFeatureletRegistrationModuleWidget</sender>
    <signal>mrmlSceneChanged(vtkMRMLScene*)</signal>
    <receiver>FiducialPointsComboBox</receiver>
    <slot>setMRMLScene(vtkMRMLScene*)</slot>

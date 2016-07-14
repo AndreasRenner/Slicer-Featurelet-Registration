@@ -15,19 +15,19 @@
 
 ==============================================================================*/
 
-#ifndef __qSlicerRegistrationModuleWidget_h
-#define __qSlicerRegistrationModuleWidget_h
+#ifndef __qSlicerFeatureletRegistrationModuleWidget_h
+#define __qSlicerFeatureletRegistrationModuleWidget_h
 
 // SlicerQt includes
 #include "qSlicerAbstractModuleWidget.h"
-#include "qSlicerRegistrationModuleExport.h"
+#include "qSlicerFeatureletRegistrationModuleExport.h"
 
-class qSlicerRegistrationModuleWidgetPrivate;
+class qSlicerFeatureletRegistrationModuleWidgetPrivate;
 class vtkMRMLNode;
-class vtkMRMLRegistrationNode;
+class vtkMRMLFeatureletRegistrationNode;
 
 /// \ingroup Slicer_QtModules_ExtensionTemplate
-class Q_SLICER_QTMODULES_REGISTRATION_EXPORT qSlicerRegistrationModuleWidget :
+class Q_SLICER_QTMODULES_FEATURELETREGISTRATION_EXPORT qSlicerFeatureletRegistrationModuleWidget :
   public qSlicerAbstractModuleWidget
 {
   Q_OBJECT
@@ -35,20 +35,20 @@ class Q_SLICER_QTMODULES_REGISTRATION_EXPORT qSlicerRegistrationModuleWidget :
 public:
 
   typedef qSlicerAbstractModuleWidget Superclass;
-  qSlicerRegistrationModuleWidget(QWidget *parent=0);
-  virtual ~qSlicerRegistrationModuleWidget();
+  qSlicerFeatureletRegistrationModuleWidget(QWidget *parent=0);
+  virtual ~qSlicerFeatureletRegistrationModuleWidget();
 
   virtual void enter();
 
 public slots:
   virtual void setMRMLScene(vtkMRMLScene*);
   void onSceneImportedEvent();
-  void setRegistrationNode(vtkMRMLNode *node);
+  void setFeatureletRegistrationNode(vtkMRMLNode *node);
   void updateWidgetFromMRML();
 
 
 protected:
-  QScopedPointer<qSlicerRegistrationModuleWidgetPrivate> d_ptr;
+  QScopedPointer<qSlicerFeatureletRegistrationModuleWidgetPrivate> d_ptr;
 
   virtual void setup();
   void onEnter();
@@ -57,7 +57,7 @@ protected:
   //void updateParameters();
   //void refreshOutputBaseName();
 
-  void initializeRegistrationNode(vtkMRMLScene*);
+  void initializeFeatureletRegistrationNode(vtkMRMLScene*);
 
 
 protected slots:
@@ -91,10 +91,10 @@ protected slots:
   void onLogicModified();
 
 private:
-  Q_DECLARE_PRIVATE(qSlicerRegistrationModuleWidget);
-  Q_DISABLE_COPY(qSlicerRegistrationModuleWidget);
+  Q_DECLARE_PRIVATE(qSlicerFeatureletRegistrationModuleWidget);
+  Q_DISABLE_COPY(qSlicerFeatureletRegistrationModuleWidget);
 
-  vtkMRMLRegistrationNode *registrationNode;
+  vtkMRMLFeatureletRegistrationNode *FeatureletRegistrationNode;
   bool IsStringNullOrEmpty(char* aString);
 };
 

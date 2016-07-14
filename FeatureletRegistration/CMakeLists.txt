@@ -1,7 +1,7 @@
 
 #-----------------------------------------------------------------------------
-set(MODULE_NAME Registration)
-set(MODULE_TITLE Featurelet-Registration)
+set(MODULE_NAME FeatureletRegistration)
+set(MODULE_TITLE FeatureletRegistration)
 
 string(TOUPPER ${MODULE_NAME} MODULE_NAME_UPPER)
 

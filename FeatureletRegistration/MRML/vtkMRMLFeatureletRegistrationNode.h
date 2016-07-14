@@ -17,24 +17,24 @@
 //
 //
 
-#ifndef __vtkMRMLRegistrationNode_h
-#define __vtkMRMLRegistrationNode_h
+#ifndef __vtkMRMLFeatureletRegistrationNode_h
+#define __vtkMRMLFeatureletRegistrationNode_h
 
 #include "vtkMRML.h"
 #include "vtkMRMLScene.h"
 #include "vtkMRMLNode.h"
-#include "vtkSlicerRegistrationModuleMRMLExport.h"
+#include "vtkSlicerFeatureletRegistrationModuleMRMLExport.h"
 
 class vtkMRMLAnnotationROINode;
 class vtkMRMLVolumeNode;
 
 /// \ingroup Slicer_QtModules_Registration
-class VTK_SLICER_REGISTRATION_MODULE_MRML_EXPORT vtkMRMLRegistrationNode : public vtkMRMLNode
+class VTK_SLICER_FEATURELETREGISTRATION_MODULE_MRML_EXPORT vtkMRMLFeatureletRegistrationNode : public vtkMRMLNode
 {
   public:
 
-  static vtkMRMLRegistrationNode *New();
-  vtkTypeMacro(vtkMRMLRegistrationNode,vtkMRMLNode);
+  static vtkMRMLFeatureletRegistrationNode *New();
+  vtkTypeMacro(vtkMRMLFeatureletRegistrationNode,vtkMRMLNode);
   void PrintSelf(ostream& os, vtkIndent indent);
 
   virtual vtkMRMLNode* CreateNodeInstance();
@@ -49,7 +49,7 @@ class VTK_SLICER_REGISTRATION_MODULE_MRML_EXPORT vtkMRMLRegistrationNode : publi
   virtual void Copy(vtkMRMLNode *node);
 
   // Get node XML tag name (like Volume, Model)
-  virtual const char* GetNodeTagName() {return "Registration";};
+  virtual const char* GetNodeTagName() {return "FeatureletRegistration";};
 
   void SetAndObserveFixedImageNodeID(const char* ID);
   void SetAndObserveMovingImageNodeID(const char* ID);
@@ -125,11 +125,11 @@ class VTK_SLICER_REGISTRATION_MODULE_MRML_EXPORT vtkMRMLRegistrationNode : publi
   virtual void UpdateReferenceID(const char *oldID, const char *newID);
 
 protected:
-  vtkMRMLRegistrationNode();
-  ~vtkMRMLRegistrationNode();
+  vtkMRMLFeatureletRegistrationNode();
+  ~vtkMRMLFeatureletRegistrationNode();
 
-  vtkMRMLRegistrationNode(const vtkMRMLRegistrationNode&);
-  void operator=(const vtkMRMLRegistrationNode&);
+  vtkMRMLFeatureletRegistrationNode(const vtkMRMLFeatureletRegistrationNode&);
+  void operator=(const vtkMRMLFeatureletRegistrationNode&);
 
   char *FixedImageNodeID;
   char *MovingImageNodeID;

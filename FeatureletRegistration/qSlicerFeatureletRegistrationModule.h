@@ -15,19 +15,19 @@
 
 ==============================================================================*/
 
-#ifndef __qSlicerRegistrationModule_h
-#define __qSlicerRegistrationModule_h
+#ifndef __qSlicerFeatureletRegistrationModule_h
+#define __qSlicerFeatureletRegistrationModule_h
 
 // SlicerQt includes
 #include "qSlicerLoadableModule.h"
 
-#include "qSlicerRegistrationModuleExport.h"
+#include "qSlicerFeatureletRegistrationModuleExport.h"
 
-class qSlicerRegistrationModulePrivate;
+class qSlicerFeatureletRegistrationModulePrivate;
 
 /// \ingroup Slicer_QtModules_ExtensionTemplate
-class Q_SLICER_QTMODULES_REGISTRATION_EXPORT
-qSlicerRegistrationModule
+class Q_SLICER_QTMODULES_FEATURELETREGISTRATION_EXPORT
+qSlicerFeatureletRegistrationModule
   : public qSlicerLoadableModule
 {
   Q_OBJECT
@@ -36,8 +36,8 @@ qSlicerRegistrationModule
 public:
 
   typedef qSlicerLoadableModule Superclass;
-  explicit qSlicerRegistrationModule(QObject *parent=0);
-  virtual ~qSlicerRegistrationModule();
+  explicit qSlicerFeatureletRegistrationModule(QObject *parent=0);
+  virtual ~qSlicerFeatureletRegistrationModule();
 
   qSlicerGetTitleMacro(QTMODULE_TITLE);
 
@@ -62,11 +62,11 @@ protected:
   virtual vtkMRMLAbstractLogic* createLogic();
 
 protected:
-  QScopedPointer<qSlicerRegistrationModulePrivate> d_ptr;
+  QScopedPointer<qSlicerFeatureletRegistrationModulePrivate> d_ptr;
 
 private:
-  Q_DECLARE_PRIVATE(qSlicerRegistrationModule);
-  Q_DISABLE_COPY(qSlicerRegistrationModule);
+  Q_DECLARE_PRIVATE(qSlicerFeatureletRegistrationModule);
+  Q_DISABLE_COPY(qSlicerFeatureletRegistrationModule);
 
 };
 
